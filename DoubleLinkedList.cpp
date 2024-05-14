@@ -22,6 +22,7 @@ void insertAfter(Node*, int);
 void deleteNode(Node*);
 void deleteFront(Node**);
 void deleteEnd(Node*);
+void clearList(Node**);
 void showList(Node*);
 
 int main(){
@@ -88,6 +89,12 @@ int main(){
         showList(head1);
     }
     
+    // Libera a memoria
+    clearList(&head1);
+
+    // Mostra a lista vazia
+    showList(head1);
+
     return 0;
 }
 
@@ -273,6 +280,26 @@ void deleteEnd(Node* head){
     // Atualiza o ponteiro 'ptrNext' do penúltimo nó para NULL, indicando o novo último nó
     current->ptrNext = NULL;
 }
+
+// Deleta uma lista e limpa a memoria alocada
+void clearList(Node** head) {
+    if (*head == NULL) {
+        return;
+    }
+
+    // Deleta todos os nós exceto o último
+    while ((*head)->ptrNext != NULL) {
+        Node* current = *head;
+        *head = (*head)->ptrNext;
+        (*head)->ptrPrev = NULL;
+        free(current);
+    }
+
+    // Deleta o último nó
+    free(*head);
+    *head = NULL;
+}
+
 
 
 // Mostra a lista
