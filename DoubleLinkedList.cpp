@@ -23,6 +23,7 @@ void deleteNode(Node*);
 void deleteFront(Node**);
 void deleteEnd(Node*);
 void clearList(Node**);
+bool inLoop(Node*);
 void showList(Node*);
 
 int main(){
@@ -94,6 +95,21 @@ int main(){
 
     // Mostra a lista vazia
     showList(head1);
+
+    // Criação de uma lista com loop
+    Node* head = newNode(1);
+    head->ptrNext = newNode(2);
+    head->ptrNext->ptrNext = newNode(3);
+    head->ptrNext->ptrNext->ptrNext = head->ptrNext; // Loop criado
+
+    printf("Lista com loop: %s\n", inLoop(head) ? "Sim" : "Não");
+
+    // Criação de uma lista sem loop
+    Node* head2 = newNode(1);
+    head2->ptrNext = newNode(2);
+    head2->ptrNext->ptrNext = newNode(3);
+
+    printf("Lista sem loop: %s\n", inLoop(head2) ? "Sim" : "Não");
 
     return 0;
 }
@@ -300,6 +316,26 @@ void clearList(Node** head) {
     *head = NULL;
 }
 
+bool inLoop(Node* head) {
+    if (head == NULL) {
+        // Se a lista estiver vazia não pode haver loop
+        return false;
+    }
+
+    Node* fast = head->ptrNext;
+    Node* slow = head;
+
+    while (fast != NULL && fast != slow) {
+        fast = fast->ptrNext;
+        if (fast != NULL) {
+            fast = fast->ptrNext;
+            slow = slow->ptrNext;
+        }
+    }
+
+    // Se fast atingiu o final da lista, não há loop
+    return (fast != NULL);
+}
 
 
 // Mostra a lista
